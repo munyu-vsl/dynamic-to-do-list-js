@@ -3,9 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskInput = document.getElementById('task-input');
     const taskList = document.getElementById('task-list');
 
-    // Load tasks from localStorage on page load
-    const savedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    savedTasks.forEach(taskText => createTaskElement(taskText));
+    let savedTasks = [];
+
+    // ✅ Function to load tasks from Local Storage and display them
+    function loadTasks() {
+        savedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        savedTasks.forEach(taskText => createTaskElement(taskText));
+    }
 
     function addTask() {
         const taskText = taskInput.value.trim();
@@ -16,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         createTaskElement(taskText);
 
-        // Save task to localStorage
+        // ✅ Save to Local Storage
         savedTasks.push(taskText);
         localStorage.setItem('tasks', JSON.stringify(savedTasks));
 
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         removeBtn.onclick = function () {
             taskList.removeChild(li);
 
-            // Remove task from localStorage
+            // ✅ Update Local Storage
             const index = savedTasks.indexOf(taskText);
             if (index !== -1) {
                 savedTasks.splice(index, 1);
@@ -46,10 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
         taskList.appendChild(li);
     }
 
+    // ✅ Attach event listeners
     addButton.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', function (event) {
         if (event.key === 'Enter') {
             addTask();
         }
     });
+
+    // ✅ Call loadTasks on page load
+    loadTasks();
 });
